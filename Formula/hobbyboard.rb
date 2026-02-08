@@ -1,51 +1,39 @@
 class Hobbyboard < Formula
-  desc "A self-hosted private Pinterest alternative for organizing media with AI."
+  desc "Your private visual library curated by AI."
   homepage "https://github.com/aravindhsampath/hobbyboard"
-  version "0.2.1"
-  if OS.linux?
-    if Hardware::CPU.arm?
-      url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.2.1/hobbyboard-aarch64-unknown-linux-gnu.tar.xz"
-      sha256 "8ca244b9b8905f1cd24cdc224da12611dd693b6f69c77e1441b5f259719418d3"
-    end
-    if Hardware::CPU.intel?
-      url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.2.1/hobbyboard-x86_64-unknown-linux-gnu.tar.xz"
-      sha256 "f246fa9a70dd9825fed987e778792d0c7a62f15d95988096fe2aa7925f6c908d"
-    end
-  end
+  version "0.1.1"
   license "MIT"
 
-  BINARY_ALIASES = {
-    "aarch64-unknown-linux-gnu": {},
-    "x86_64-unknown-linux-gnu":  {},
-  }.freeze
-
-  def target_triple
-    cpu = Hardware::CPU.arm? ? "aarch64" : "x86_64"
-    os = OS.mac? ? "apple-darwin" : "unknown-linux-gnu"
-
-    "#{cpu}-#{os}"
+  # MacOS (Apple Silicon)
+  if OS.mac? && Hardware::CPU.arm?
+    url "https://github.com/aravindhsampath/hobbyboard-v0.1.1-aarch64-apple-darwin.tar.gz"
+    sha256 "e9cbaff03e1750413f4c3b9493574e4bbde625bd081d351e75c85596120dd886"
   end
 
-  def install_binary_aliases!
-    BINARY_ALIASES[target_triple.to_sym].each do |source, dests|
-      dests.each do |dest|
-        bin.install_symlink bin/source.to_s => dest
-      end
-    end
+  # Linux (x86_64)
+  if OS.linux? && Hardware::CPU.intel?
+    url "https://github.com/aravindhsampath/hobbyboard-v0.1.1-x86_64-unknown-linux-gnu.tar.gz"
+    sha256 "a8dd00173cf1eb50652da33d6d5630b791f7c931cb7d441feef50c55abd76eef"
   end
+
+  depends_on "ffmpeg"
+  depends_on "libheif"
+  depends_on "aom"
+  depends_on "dav1d"
 
   def install
-    bin.install "hobbyboard" if OS.linux? && Hardware::CPU.arm?
-    bin.install "hobbyboard" if OS.linux? && Hardware::CPU.intel?
+    bin.install "hobbyboard"
+  end
 
-    install_binary_aliases!
+  def caveats
+    <<~EOS
+      Hobbyboard requires a vector database (Qdrant) to function.
+      The easiest way to run Qdrant is via Docker:
+        docker run -d -p 6333:6333 -p 6334:6334 -v $(pwd)/qdrant_storage:/qdrant/storage:z qdrant/qdrant
+    EOS
+  end
 
-    # Homebrew will automatically install these, so we don't need to do that
-    doc_files = Dir["README.*", "readme.*", "LICENSE", "LICENSE.*", "CHANGELOG.*"]
-    leftover_contents = Dir["*"] - doc_files
-
-    # Install any leftover files in pkgshare; these are probably config or
-    # sample files.
-    pkgshare.install(*leftover_contents) unless leftover_contents.empty?
+  test do
+    system "#{bin}/hobbyboard", "--help"
   end
 end
