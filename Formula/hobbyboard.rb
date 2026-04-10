@@ -1,25 +1,25 @@
 class Hobbyboard < Formula
   desc "Your private visual library curated by AI."
   homepage "https://hobbyboard.aravindh.net"
-  version "0.1.4"
+  version "0.2.0"
   license "MIT"
 
   # MacOS (Apple Silicon)
   if OS.mac? && Hardware::CPU.arm?
-    url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.1.4/hobbyboard-v0.1.4-aarch64-apple-darwin.tar.gz"
-    sha256 "e0e70c05c75fef1f797ac68ebb1fa2e8c9433d5b8df3f598eb25ac119563f262"
+    url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.2.0/hobbyboard-v0.2.0-aarch64-apple-darwin.tar.gz"
+    sha256 "12b90bd832edb6fc6980e17c637afcca95d15f9ff8cf2e55322fe0821616b412"
   end
 
   # Linux (x86_64)
   if OS.linux? && Hardware::CPU.intel?
-    url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.1.4/hobbyboard-v0.1.4-x86_64-unknown-linux-gnu.tar.gz"
-    sha256 "292e11348b41babc734bff054ff92e20ad81726cb898e16e91c278fbe62dfe4a"
+    url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.2.0/hobbyboard-v0.2.0-x86_64-unknown-linux-gnu.tar.gz"
+    sha256 "643e95a978b543325bc6de85f60f725f803c5c96958d2c951676b3e7839f873e"
   end
 
   # Linux (ARM64)
   if OS.linux? && Hardware::CPU.arm?
-    url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.1.4/hobbyboard-v0.1.4-aarch64-unknown-linux-gnu.tar.gz"
-    sha256 "a8a65b861d5c9f88c28e08cbf2340057e06d36bfe355776c3f4a21237bee2767"
+    url "https://github.com/aravindhsampath/hobbyboard/releases/download/v0.2.0/hobbyboard-v0.2.0-aarch64-unknown-linux-gnu.tar.gz"
+    sha256 "4b7bc7cc8efc635f749b508a1751bc9c83eb8670ccccb3497c2896070c0e69c0"
   end
 
   depends_on "ffmpeg"
